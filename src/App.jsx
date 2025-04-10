@@ -1,13 +1,19 @@
-import { Routes, Route } from 'react-router-dom';
-// import Home from './pages/Home';
-// import About from './pages/About';
+import { Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar/Navbar";
+import ItemListContainer from "./components/ItemListContainer/ItemListContainer";
+import ItemDetailContainer from "./components/ItemDetailContainer/ItemDetailContainer";
+import Checkout from "./components/Checkout/Checkout";
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/about" element={<About />} />
-    </Routes>
+    <>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<ItemListContainer />} />
+        <Route path="/item/:id" element={<ItemDetailContainer />} />
+        <Route path="/checkout" element={<Checkout />} />
+      </Routes>
+    </>
   );
 }
 

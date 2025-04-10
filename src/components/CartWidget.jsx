@@ -1,20 +1,11 @@
-import { Link } from 'react-router-dom';
-import CartWidget from './CartWidget';
+import { useContext } from "react";
+import { CartContext } from "../../context/CartContext";
 
-function Navbar() {
-  return (
-    <nav>
-      <div className="nav-wrapper blue darken-3">
-        <Link to="/" className="brand-logo left">E-Commerce Autos</Link>
-        <ul className="right">
-          <li><Link to="/category/sedan">Sedanes</Link></li>
-          <li><Link to="/category/suv">SUV</Link></li>
-          <li><Link to="/category/camioneta">Camionetas</Link></li>
-          <li><CartWidget /></li>
-        </ul>
-      </div>
-    </nav>
-  );
-}
+const CartWidget = () => {
+  const { cart } = useContext(CartContext);
+  const quantity = cart.reduce((acc, item) => acc + item.quantity, 0);
 
-export default Navbar;
+  return <div>🛒 {quantity}</div>;
+};
+
+export default CartWidget;

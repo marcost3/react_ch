@@ -1,0 +1,6 @@
+[
+    { "id": 1, "title": "Auto Deportivo", "price": 15000, "description": "Velocidad y estilo." },
+    { "id": 2, "title": "SUV Familiar", "price": 20000, "description": "Espacio y comodidad." },
+    { "id": 3, "title": "Camioneta 4x4", "price": 25000, "description": "Fuerza todoterreno." }
+  ]
+  
