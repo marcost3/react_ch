@@ -1,69 +1,79 @@
-import { useContext, useState } from "react";
-import { db } from "../firebase/client";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { CartContext } from "../context/CartContext";
+import { useContext, useState } from 'react';
+import { CartContext } from '../context/CartContext';
+import { collection, addDoc } from 'firebase/firestore';
+import { db } from '../firebase/client';
+import Swal from 'sweetalert2';
 
 const Checkout = () => {
-  const { cart, clearCart, getTotal } = useContext(CartContext);
-  const [orderId, setOrderId] = useState("");
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const { cart, clearCart } = useContext(CartContext);
+  const [buyer, setBuyer] = useState({
+    name: '',
+    email: '',
+    address: '',
+    phone: '',
+    dni: ''
+  });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const order = {
-      buyer: { name, email },
-      items: cart,
-      total: getTotal(),
-      date: serverTimestamp(),
-    };
-
-    const ordersRef = collection(db, "orders");
-
-    addDoc(ordersRef, order).then((doc) => {
-      setOrderId(doc.id);
-      clearCart();
-    });
+  const handleChange = (e) => {
+    setBuyer({ ...buyer, [e.target.name]: e.target.value });
   };
 
-  if (orderId) {
-    return (
-      <div className="container mt-5">
-        <h2>¡Gracias por tu compra!</h2>
-        <p>Tu código de orden es: <strong>{orderId}</strong></p>
-      </div>
-    );
+  const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+
+  const handlePurchase = async () => {
+    if (!buyer.name || !buyer.email || !buyer.address || !buyer.phone || !buyer.dni) {
+      Swal.fire('Error', 'Completa todos los campos del formulario.', 'error');
+      return;
+    }
+  
+    const order = {
+      buyer,
+      items: cart,
+      date: new Date(),
+      total
+    };
+  
+    const ordersCollection = collection(db, 'orders');
+  
+    try {
+      const docRef = await addDoc(ordersCollection, order);
+      Swal.fire('Compra realizada', `Tu número de orden es: ${docRef.id}`, 'success');
+      clearCart();
+    } catch (error) {
+      console.error("Error al guardar la orden en Firestore:", error);
+      Swal.fire('Error', 'No se pudo guardar la orden.', 'error');
+    }    
+  };
+  
+
+  if (cart.length === 0) {
+    return <h3 className="text-center mt-5">El carrito está vacío.</h3>;
   }
 
   return (
     <div className="container mt-5">
-      <h2>Checkout</h2>
-      <form onSubmit={handleSubmit} className="mt-4">
-        <div className="mb-3">
-          <label className="form-label">Nombre</label>
-          <input
-            type="text"
-            className="form-control"
-            onChange={(e) => setName(e.target.value)}
-            value={name}
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <label className="form-label">Email</label>
-          <input
-            type="email"
-            className="form-control"
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
-            required
-          />
-        </div>
-        <button type="submit" className="btn btn-success">
-          Finalizar compra
-        </button>
+      <h2>Resumen de compra</h2>
+      <ul className="list-group mb-4">
+        {cart.map((item) => (
+          <li className="list-group-item" key={item.id}>
+            {item.title} - Cantidad: {item.quantity} - Precio unitario: ${item.price}
+          </li>
+        ))}
+        <li className="list-group-item fw-bold">Total: ${total}</li>
+      </ul>
+
+      <h4>Datos del comprador</h4>
+      <form className="row g-3">
+        <input type="text" className="form-control" placeholder="Nombre" name="name" onChange={handleChange} />
+        <input type="email" className="form-control" placeholder="Email" name="email" onChange={handleChange} />
+        <input type="text" className="form-control" placeholder="Dirección" name="address" onChange={handleChange} />
+        <input type="text" className="form-control" placeholder="Teléfono" name="phone" onChange={handleChange} />
+        <input type="text" className="form-control" placeholder="DNI" name="dni" onChange={handleChange} />
       </form>
+
+      <button className="btn btn-success mt-4" onClick={handlePurchase}>
+        Finalizar compra
+      </button>
     </div>
   );
 };

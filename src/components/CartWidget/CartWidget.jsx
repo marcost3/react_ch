@@ -1,15 +1,20 @@
 import React, { useContext } from "react";
-import { CartContext } from "../context/CartContext"; // asegurate que el path es correcto
+import { useNavigate } from "react-router-dom";
+import { CartContext } from "../context/CartContext";
 
 const CartWidget = () => {
   const { cart } = useContext(CartContext);
+  const navigate = useNavigate();
 
-  // Calcular el total de items en el carrito
-  const totalQuantity = cart.reduce((acc, item) => acc + item.quantity, 0);
+  const handleClick = () => {
+    navigate("/checkout");
+  };
+
+  const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
-    <button className="btn btn-outline-light">
-      🛒 <span className="badge bg-secondary">{totalQuantity}</span>
+    <button className="btn btn-outline-light" onClick={handleClick}>
+      🛒 <span className="badge bg-secondary">{totalItems}</span>
     </button>
   );
 };
