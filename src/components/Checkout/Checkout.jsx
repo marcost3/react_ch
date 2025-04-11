@@ -37,15 +37,26 @@ const Checkout = () => {
   
     try {
       const docRef = await addDoc(ordersCollection, order);
-      Swal.fire('Compra realizada', `Tu número de orden es: ${docRef.id}`, 'success');
-      clearCart();
+    
+      if (docRef.id) {
+        Swal.fire('Compra realizada', `Tu número de orden es: ${docRef.id}`, 'success');
+        clearCart();
+      } else {
+        throw new Error('No se obtuvo ID de la orden.');
+      }
     } catch (error) {
       console.error("Error al guardar la orden en Firestore:", error);
-      Swal.fire('Error', 'No se pudo guardar la orden.', 'error');
-    }    
+      
+      // Si el error tiene mensaje útil, mostralo en consola
+      if (error instanceof Error) {
+        Swal.fire('Error', `No se pudo guardar la orden: ${error.message}`, 'error');
+      } else {
+        Swal.fire('Error', 'No se pudo guardar la orden (error desconocido).', 'error');
+      }
+    }
+        
   };
   
-
   if (cart.length === 0) {
     return <h3 className="text-center mt-5">El carrito está vacío.</h3>;
   }
@@ -70,7 +81,7 @@ const Checkout = () => {
         <input type="text" className="form-control" placeholder="Teléfono" name="phone" onChange={handleChange} />
         <input type="text" className="form-control" placeholder="DNI" name="dni" onChange={handleChange} />
       </form>
-
+      
       <button className="btn btn-success mt-4" onClick={handlePurchase}>
         Finalizar compra
       </button>
