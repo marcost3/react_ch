@@ -1,7 +1,6 @@
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
 const Item = ({ item }) => {
-
   if (!item) return <p>Cargando producto...</p>;
 
   return (
@@ -12,7 +11,7 @@ const Item = ({ item }) => {
         <Link to={`/item/${item.id}`} className="btn btn-primary">Ver detalle</Link>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Item
+export default Item;
