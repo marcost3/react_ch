@@ -1,14 +1,20 @@
 import { Link } from 'react-router-dom';
 
 const Item = ({ item }) => {
-  if (!item) return <p>Cargando producto...</p>;
-
   return (
-    <div className="card h-100">
+    <div className="card m-3" style={{ width: '18rem' }}>
+      <img
+        src={item.image}
+        className="card-img-top"
+        alt={item.title}
+        style={{ height: '200px', objectFit: 'cover' }}
+      />
       <div className="card-body">
         <h5 className="card-title">{item.title}</h5>
-        <p className="card-text">${item.price}</p>
-        <Link to={`/item/${item.id}`} className="btn btn-primary">Ver detalle</Link>
+        <p className="card-text">Precio: ${item.price}</p>
+        <Link to={`/item/${item.id}`} className="btn btn-primary">
+          Ver detalle
+        </Link>
       </div>
     </div>
   );

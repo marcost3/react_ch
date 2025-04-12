@@ -2,15 +2,20 @@ import React from 'react';
 import Item from '../Item/Item';
 
 const ItemList = ({ items }) => {
-    return (
-      <div>
+  return (
+    <div className="container">
+      <div className="row justify-content-center">
         {items
-          .filter((item) => item && item.title) // Filtramos nulls o faltantes
+          .filter((item) => item && item.title)
           .map((item) => (
-            <Item key={item.id} item={item} />
+            <div className="col-md-4 d-flex justify-content-center" key={item.id}>
+              <Item item={item} />
+            </div>
           ))}
       </div>
-    );
-  };
-  
+    </div>
+  );
+};
+
+
 export default ItemList;

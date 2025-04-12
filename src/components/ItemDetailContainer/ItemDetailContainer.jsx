@@ -9,6 +9,9 @@ const ItemDetailContainer = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+
+    // console.log segun estados
+
     console.log('🟡 useEffect ejecutado, id:', id);
     if (!id) return;
   
@@ -39,6 +42,8 @@ const ItemDetailContainer = () => {
   
   if (loading) return <p>Cargando...</p>;
   if (!item) return <p>Producto no encontrado.</p>;
+
+  //console.log final
 
   console.log("ITEM A MOSTRAR:", item);
 
