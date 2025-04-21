@@ -1,8 +1,9 @@
-# React + Vite
+Proyecto final - Turcis
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este proyecto tiene como concepto un e-commerce de una consecionaria "Rogelio Motors", la cual permite ver algunos productos en su inicio, ofreciendo un botón en cada uno de ellos para verlos en mas detalle.
 
-Currently, two official plugins are available:
+En la vista detallada de cada producto permite comprar las unidades deseadas en cada producto, sumando cada producto al carrito.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+En la parte superior, se observa una barra de navegacion con el logo de la consecionaria, algunas categorias de productos, y en la parte derecha superior de la barra el boton del carrito.
+
+En el carrito se observa un resumen de la orden con cada producto, la cantidad agregada segun cada producto, el precio unitario, el precio total por producto y el precio final de la orden. Seguido de un formulario con datos del comprador a desarrollar, validando cada dato ingresado. Y finalmente un boton para finalizar la orden, guardando la misma en la base de datos, organizando stock y generando la orden.
