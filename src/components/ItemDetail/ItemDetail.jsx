@@ -1,33 +1,37 @@
-import { useState, useContext } from 'react'
-import { CartContext } from '../context/CartContext'
+import { useState, useContext } from 'react';
+import { CartContext } from '../context/CartContext';
+import ItemCount from '../ItemCount/ItemCount';
 
 const ItemDetail = ({ item }) => {
-  const [quantity, setQuantity] = useState(1)
-  const { addItem } = useContext(CartContext)
+  const { addItem } = useContext(CartContext);
+
+  const handleAdd = (quantity) => {
+    addItem(item, quantity);
+  };
 
   return (
-    <div className="card p-4">
-      <h2>{item.title}</h2>
-      <p>{item.description}</p>
-      <p className="fw-bold">${item.price}</p>
+    <div className="container mt-5">
+      <div className="row align-items-center">
+        {/* Info */}
+        <div className="col-md-6">
+          <h2>{item.title}</h2>
+          <p>{item.description}</p>
+          <p className="fw-bold">Precio: ${item.price}</p>
+          <ItemCount stock={item.stock} initial={1} onAdd={handleAdd} />
+        </div>
 
-      <div className="d-flex align-items-center gap-3 mb-3">
-        <input
-          type="number"
-          value={quantity}
-          min={1}
-          className="form-control w-25"
-          onChange={e => setQuantity(Number(e.target.value))}
-        />
-        <button
-          className="btn btn-success"
-          onClick={() => addItem(item, quantity)}
-        >
-          Agregar al carrito
-        </button>
+        {/* Imagen */}
+        <div className="col-md-6 text-center">
+          <img
+            src={item.image}
+            alt={item.title}
+            className="img-fluid rounded shadow"
+            style={{ maxHeight: '400px', objectFit: 'cover' }}
+          />
+        </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ItemDetail
+export default ItemDetail;

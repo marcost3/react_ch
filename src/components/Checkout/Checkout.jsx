@@ -11,7 +11,14 @@ import { db } from '../firebase/client';
 import Swal from 'sweetalert2';
 
 const Checkout = () => {
-  const { cart, clearCart } = useContext(CartContext);
+  const {
+    cart,
+    clearCart,
+    removeItem,
+    increaseQuantity,
+    decreaseQuantity,
+  } = useContext(CartContext);
+
   const [buyer, setBuyer] = useState({
     name: '',
     email: '',
@@ -74,7 +81,6 @@ const Checkout = () => {
 
       await Promise.all(stockUpdates);
 
-      // si la compra es exitosa
       Swal.fire('Compra realizada', `Tu número de orden es: ${docRef.id}`, 'success');
       clearCart();
     } catch (error) {
@@ -92,12 +98,26 @@ const Checkout = () => {
       <h2>Resumen de compra</h2>
       <ul className="list-group mb-4">
         {cart.map((item) => (
-          <li className="list-group-item" key={item.id}>
-            {item.title} - Cantidad: {item.quantity} - Precio unitario: ${item.price}
+          <li className="list-group-item d-flex justify-content-between align-items-center" key={item.id}>
+            <div style={{ flex: 1 }}>
+              <strong>{item.title}</strong><br />
+              Precio: ${item.price} <br />
+              Cantidad:
+              <button className="btn btn-sm btn-secondary mx-2" onClick={() => decreaseQuantity(item.id)}>-</button>
+              {item.quantity}
+              <button className="btn btn-sm btn-secondary mx-2" onClick={() => increaseQuantity(item.id)}>+</button>
+            </div>
+            <button className="btn btn-danger btn-sm" onClick={() => removeItem(item.id)}>
+              Eliminar
+            </button>
           </li>
         ))}
         <li className="list-group-item fw-bold">Total: ${total}</li>
       </ul>
+
+      <button className="btn btn-warning mb-3" onClick={clearCart}>
+        Vaciar carrito
+      </button>
 
       <h4>Datos del comprador</h4>
       <form className="row g-3">
